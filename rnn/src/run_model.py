@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 #
-# @Author: yangxiaohan@xiaomi.com
+# @Author: yangxiaohan
 # @Date: 2018-10-10
 #
 

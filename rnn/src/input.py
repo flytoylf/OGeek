@@ -1,14 +1,5 @@
 #!/usr/bin/env python
 
-#==================================#
-#
-# file: input.py
-# created by litai@xiaomi.com
-# on 2018/8/23
-#
-#==================================#
-
-
 import math
 import glob
 import random

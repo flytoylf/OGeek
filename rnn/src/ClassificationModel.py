@@ -1,14 +1,5 @@
 #!/usr/bin/env python
 
-#==================================#
-#
-# file: ClassificationModel.py.py
-# created by litai@xiaomi.com
-# on 2018/8/23
-#
-#==================================#
-
-
 import sys
 
 import numpy as np

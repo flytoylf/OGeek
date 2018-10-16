@@ -1,14 +1,5 @@
 #!/usr/bin/env python
 
-#==================================#
-#
-# file: optimizer_core.py
-# created by litai@xiaomi.com
-# on 2018/8/23
-#
-#==================================#
-
-
 import tensorflow as tf
 
 
