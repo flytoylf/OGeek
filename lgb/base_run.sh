@@ -1,8 +1,4 @@
 #!/bin/bash
-#
-# @Author: yangxiaohan@xiaomi.com
-# @Date: 2018-09-21
-#
 
 function run()
 {
