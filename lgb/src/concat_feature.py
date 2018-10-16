@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# @Author: yangxiaohan@xiaomi.com
-# @Date: 2018-10-01
-#
+
 
 import sys
 import os
