@@ -8,7 +8,7 @@ lgb
 rnn
   1. 代码入口：python3 src/run_model.py。
   2. 目前代码中的网络是gru + cnn + attention，线上还未提交。
-  3. 之前实用纯cnn提交了一版，线上成绩0.7059。
+  3. 之前使用纯cnn提交了一版，线上成绩0.7059。
   4. 代码需要提供预训练向量，如果没有预训练向量需要将is_use_pretrained_word_embedding置为False。
   5. 网络结构在network_core.py中，这里可以设计自己的网络结构进行优化。
   
