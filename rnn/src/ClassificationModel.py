@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 import sys
 
 import numpy as np
@@ -19,11 +20,11 @@ class ClassificationModel(object):
         model.type_of_tags = ["prefix", "title", "segments", "tag"]
         model.inputs = {
             tt: tf.placeholder(tf.int32, shape=[None, None], name=tt) if tt != "segments" 
-            else tf.placeholder(tf.int32, shape=[None, 11, None], name=tt)
+            else tf.placeholder(tf.int32, shape=[None, 10, None], name=tt)
             for tt in model.type_of_tags
         }
-        model.inputs["scores"] = tf.placeholder(tf.float32, shape=[None, 11], name="scores")
-        model.inputs["texts"] = tf.placeholder(tf.int32, shape=[None, 11], name="texts")
+        model.inputs["scores"] = tf.placeholder(tf.float32, shape=[None, 10], name="scores")
+        model.inputs["texts"] = tf.placeholder(tf.int32, shape=[None, 10], name="texts")
         model.targets = tf.placeholder(dtype=tf.int32, shape=[None, 1], name="targets")
 
         model.batch_size = tf.shape(model.inputs["prefix"])[0]

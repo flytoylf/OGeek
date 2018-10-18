@@ -6,14 +6,10 @@ import re
 import sys
 import json
 import time
+import jieba
 import logging
 import pandas as pd
 import numpy as np
-
-sys.path.append("conf")
-import config
-sys.path.append("tool")
-import nlp_basic
 
 logging.basicConfig(
         level = logging.INFO,
@@ -24,11 +20,7 @@ logging.basicConfig(
 all_segments = set()
 
 def get_segment(text, tag):
-    segs = list(nlp_basic.segment(text))
-    if tag == "train":
-        for seg in segs:
-            if seg not in all_segments:
-                all_segments.add(seg)
+    segs = jieba.cut(text)
     return "|".join(segs)
 
 
@@ -79,71 +71,61 @@ def load_data(input_file, output_file, data_tag):
                 fo.write("\n")
 
 
-def get_word_vector():
-    logging.info("load word vectors ...")
-    with open(config.WORD_VECTORS_FILE, 'w') as fo:
-        with open(config.ORI_WORD_VECTORS_FILE, 'r', encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                tokens = line.split()
-                word = tokens[0]
-                if word in all_segments:
-                    fo.write(line)
-                    fo.write("\n")
-               
-
-def merge_data():
-    train_data = pd.read_csv(config.TRAIN_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
-    valid_data = pd.read_csv(config.VALID_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
-    test_data = pd.read_csv(config.cTEST_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
-
-
 def main():
     data_type = "test_A"
+    ORI_TRAIN_DATA_FILE = "./data/download/oppo_round1_train_20180929.txt"
+    ORI_VALID_DATA_FILE = "./data/download/oppo_round1_vali_20180929.txt"
+    ORI_TEST_DATA_FILE = "./data/download/oppo_round1_test_A_20180929.txt"
+    ORI_TEST_B_DATA_FILE = "./data/download/oppo_round1_test_A_20180929.txt"
+    TRAIN_DATA_FILE = "./data/download/train.txt"
+    VALID_DATA_FILE = "./data/download/valid.txt"
+    TEST_DATA_FILE = "./data/download/test.txt"
+    
+    TRAIN_DATA = "./data/train.txt"
+    PREDICT_DATA = "./data/predict.txt"
+
     
     time_point = time.time()
     if data_type == "test_A":
         logging.info("load train data ...")
-        load_data(config.ORI_TRAIN_DATA_FILE, config.TRAIN_DATA_FILE, "train")
+        load_data(ORI_TRAIN_DATA_FILE, TRAIN_DATA_FILE, "train")
         logging.info("load train data cost time: "+str(time.time()-time_point))
 
         logging.info("load valid data ...")
         time_point = time.time()
-        load_data(config.ORI_VALID_DATA_FILE, config.VALID_DATA_FILE, "valid")
+        load_data(ORI_VALID_DATA_FILE, VALID_DATA_FILE, "valid")
         logging.info("load valid data cost time: "+str(time.time()-time_point))
 
         logging.info("load test data ...")
         time_point = time.time()
-        load_data(config.ORI_TEST_DATA_FILE, config.TEST_DATA_FILE, "test")
+        load_data(ORI_TEST_DATA_FILE, TEST_DATA_FILE, "test")
         logging.info("load test data cost time: "+str(time.time()-time_point))
 
-        logging.info("get word vector ...")
-        time_point = time.time()
-        get_word_vector()
         logging.info("get word vector cost time: "+str(time.time()-time_point))
 
     elif data_type == "test_B":
         logging.info("load test B data ...")
         time_point = time.time()
-        load_data(config.ORI_TEST_B_DATA_FILE, config.TEST_B_DATA_FILE, "test")
+        load_data(ORI_TEST_B_DATA_FILE, TEST_B_DATA_FILE, "test")
         logging.info("load test B data cost time: "+str(time.time()-time_point))
 
     else:
         logging.error("wrong data_type!")
 
-    train_data = pd.read_csv(config.TRAIN_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
-    valid_data = pd.read_csv(config.VALID_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
+    train_data = pd.read_csv(TRAIN_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
+    valid_data = pd.read_csv(VALID_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
     if data_type == "test_A":
-        test_data = pd.read_csv(config.TEST_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
+        test_data = pd.read_csv(TEST_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
     elif data_type == "test_B":
-        test_data = pd.read_csv(config.TEST_B_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
+        test_data = pd.read_csv(TEST_B_DATA_FILE, sep="\t", encoding="utf-8", low_memory=False)
     else:
         logging.error("wrong data_type!")
 
-    data = pd.concat([train_data, valid_data, test_data])
-    data.to_csv(config.ORI_DATA_FILE, sep="\t", index=False, encoding="utf-8")
+    train_data = pd.concat([train_data, valid_data])
+    train_data.to_csv(TRAIN_DATA, sep="\t", index=False, encoding="utf-8")
+                    
+    pred_data = test_data
+    pred_data.to_csv(PREDICT_DATA, sep="\t", index=False, encoding="utf-8")
                     
     logging.info("done!")
 

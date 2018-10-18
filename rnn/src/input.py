@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 import math
 import glob
 import random
@@ -26,8 +27,8 @@ def load_data(data_file, is_train=1, delimiter="\t", field_delimiter="|"):
             tag = tokens[2]
             target = tokens[3]
             flag = tokens[4]
-            raw_texts = tokens[6:17]
-            scores = tokens[17:28]
+            raw_texts = tokens[6:16]
+            scores = tokens[16:26]
 
             texts = list()
             segments = list()
